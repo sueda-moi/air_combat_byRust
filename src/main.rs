@@ -1,8 +1,13 @@
 //引入 bevy 最常用的预导出模块（Transform、Vec3、App 等）
 //Import the most commonly used pre-export modules of bevy (Transform, Vec3, App, etc.)
+use bevy::prelude::Cuboid;
+//use bevy::log::info;
 use bevy::prelude::*; // AppExit = 退出事件
-use bevy::render::mesh::{Mesh, Mesh3d}; // Mesh = 网格组件
-use bevy::prelude::Cuboid;  // Cuboid = 立方体几何体
+use bevy::render::mesh::{Mesh, Mesh3d}; // Mesh = 网格组件 // Cuboid = 立方体几何体
+
+/*  ───── Tag component ─────*/
+#[derive(Component)]
+struct TagCube; // 用于查询的立方体标签
 
 //listen for the escape key
 /*-----------------------------------------------------------------------------------
@@ -77,16 +82,38 @@ fn setup(
     // 1. 创建网格与材质句柄  // Create mesh & material handles
     // 1. 把 Cuboid 转成 Mesh / Convert Cuboid into a Mesh
     let cube_mesh = meshes.add(Mesh::from(Cuboid::from_size(Vec3::ONE)));
-     // 2. 纯白 StandardMaterial / Pure-white material
-    let cube_mat  = materials.add(StandardMaterial::from(Color::WHITE));
+    // 2. 纯白 StandardMaterial / Pure-white material
+    let cube_mat = materials.add(StandardMaterial::from(Color::WHITE));
 
     // 2. 插入组件  // Spawn entity with components
     commands.spawn((
         // 3D 网格组件 Mesh component
-        Mesh3d::from(cube_mesh),// 几何体 Geometry
+        Mesh3d::from(cube_mesh),        // 几何体 Geometry
         MeshMaterial3d::from(cube_mat), // 材质 Material
-        Transform::default(),  // 变换 Transform
+        Transform::default(),   // 变换 Transform
+        TagCube,       // 立方体标签 Cube tag
     ));
+}
+
+/*───── System: rotate cube ─────*/
+fn rotate_cube(
+    mut q: Query<&mut Transform, With<TagCube>>, // 用来查询 TagCube 组件的实体
+    // Query = 用来查询实体的命令队列
+    // With = 只查询带有 TagCube 组件的实体
+    time: Res<Time>, // 用来获取时间增量
+                     // Res = 资源单例；这里代表时间增量的当前状态
+) {
+    let speed_deg_per_sec = 450_f32; // 旋转速度
+    let delta = speed_deg_per_sec.to_radians()  // 转换成弧度
+        * time.delta_secs(); // 计算增量
+    for mut trans in &mut q {
+        // 遍历所有查询到的实体
+        // Iterate through all queried entities
+        trans.rotate_y(delta);// Rotate around Y axis// 绕 Y 轴旋转
+        trans.rotate_x(delta * 0.5); // 绕 X 轴旋转
+        // Rotate around X axis
+        
+    }
 }
 
 /* -------------------------------------------------------------------------
@@ -99,7 +126,13 @@ fn main() {
         // Startup 阶段：只在第一帧运行一次，用来生成初始场景
         .add_systems(Startup, setup)
         // Update 阶段：每一帧运行，用来处理输入、游戏逻辑
-        .add_systems(Update, close_on_esc) // add the close_on_esc system to the update stage
+        .add_systems(
+            Update, // add systems to the update stage
+            (
+                close_on_esc, // add the close_on_esc system
+                rotate_cube,  // add the rotate_cube system
+            ),
+        ) // add the close_on_esc system to the update stage
         // 启动游戏主循环
         .run();
 }
