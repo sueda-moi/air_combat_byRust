@@ -1,58 +1,96 @@
-# Air-Combat Demo (Bevy 0.15)  
-空战 Demo – 基于 Bevy 0.15 的逐步教学项目
-==========================================
+# Air‑Combat Demo (Bevy 0.15)
 
-> **Solo dev, step-by-step.**  
-> **个人独立、一步一脚印。**
+空战实时战斗原型
 
-本仓库记录了一个极简实时战斗原型的搭建过程：  
-从 **打开黑屏 → 场景搭建 → 物体旋转 / 输入处理**，逐步深入 Bevy 生态。  
-The repo shows how to build a tiny real-time action prototype in incremental steps,
-starting from an empty window, adding a scene, then motion / input, and beyond.
+> Solo dev – step by step.
+> 个人独立 · 一步一脚印
 
 ---
 
-## 0 · Features / 已实现功能
+## ① Project Vision / 项目愿景
 
-| Status | Feature (EN) | 功能 (中文) |
-|--------|--------------|-------------|
-| ✅ | Blank window boot | 黑屏窗口启动 |
-| ✅ | Esc → graceful quit | 按 **Esc** 退出 |
-| ✅ | Scene setup via `Startup` systems | `Startup` 系统搭建场景 |
-| ✅ | Camera + Point-light | 摄像机 + 点光源 |
-| ✅ | 1 × 1 × 1 white cube (`Cuboid`) | 纯白立方体 |
+A small‑scale real‑time **combat sandbox** built with **Rust + Bevy**, then extended to an on‑chain game for the 2025 Solana hackathon.
 
-> 下一步将实现：**Y-axis rotation** of the cube（立方体 Y 轴自转）。
+* **Gameplay 目标** | 实机玩法：空中连击 · 轻功 · Boss 速杀
+* **Lore 核心** | 世界观：反抗暴政 / 失忆伙伴 / 白蛇圣物 / 雪山终点
+* **Chain 集成** | 上链：钱包登录 · 战绩记录 · NFT 道具 · 剧情节点
 
 ---
 
-## 1 · Requirements / 环境需求
+## ② Current Status / 当前进度
 
-| Tool | Minimum | 用途 |
-|------|---------|------|
-| Rust | 1.78 (stable) | 语言工具链 |
-| Cargo | 同上 | 构建器 |
-| Bevy | 0.15.1 | 游戏引擎 |
-| Git  | optional | 版本管理（推荐） |
+|  Stage          |  Done  |  说明                     |
+| --------------- | ------ | ----------------------- |
+|  Boot Window    |  ✅     | 窗口 + ESC 退出             |
+|  Scene Setup    |  ✅     | 摄像机 · 点光源 · 立方体         |
+|  Cube Rotation  |  ✅     | 45°/s Y‑axis 自转         |
+|  Camera WASD    |  ✅     | WASD 平移主摄像机             |
+|  Combat Core α  |  ⏳     | Player Slash, Enemy AI… |
+
 
 ---
 
-## 2 · Setup & Run / 快速开始
+## ③ Directory Layout / 目录结构
+
+```
+├─ assets/            # meshes, textures, animations
+├─ src/
+│   └─ main.rs        # single‑file prototype (will split later)
+├─ schedule.md        # step‑by‑step task log
+└─ README.md          # this file
+```
+
+---
+
+## ④ Build & Run / 快速开始
 
 ```bash
-# 1. 安装 rustup（若未安装）
-#    Install rustup if you don't have it
-curl https://sh.rustup.rs -sSf | sh
+# Prerequisites
+rustup update stable        # Rust 1.78+
+cargo install cargo‑edit    # for `cargo add`
 
-# 2. 新建项目 / Create project
-cargo new air_combat
+# Clone & build
+git clone <repo>
 cd air_combat
+cargo run                   # debug build
+```
 
-# 3. 添加 Bevy 依赖 / Add Bevy
-cargo add bevy@0.15.1
+发布版：`cargo run --release`。
 
-# 4. 复制 src/main.rs 和 README.md
-#    Copy src/main.rs & README.md from this repo
+---
 
-# 5. 运行 / Run
-cargo run
+## ⑤ Roadmap / 路线图
+
+> 详细时间表见 **schedule.md**
+
+1. **Combat Core α (May)**  – Player Slash, Enemy Chase, HP & Hit, Stagger/Knockback
+2. **Combat Core β (May‑Jun)** – Combo FSM, YAML hot‑reload stats, Mini‑Boss demo
+3. **Vertical Slice v1 (Jun)** – Chapter‑1 scene, wallet connect, on‑chain battle record
+4. **Vertical Slice v2 (Jul)** – NFT loot, story checkpoints on chain, UI polish
+5. **Hackathon Polish (Aug–Sep)** – networked co‑op prototype, QA, docs
+
+---
+
+## ⑥ Tech Stack
+
+* **Rust 1.78 stable**
+* **Bevy 0.15.1** (+ Rapier3D, bevy\_asset\_loader)
+* **Solana SDK** / Anchor / Metaplex
+
+---
+
+## ⑦ Contribution / 贡献
+
+The project is currently a solo R\&D log. PRs welcome after Vertical Slice v1.
+
+项目早期以个人实验为主，待 v1 后开放外部 PR。欢迎在 Issue 里讨论改进建议。
+
+---
+
+## ⑧ License
+
+MIT
+
+---
+
+> "Run, remember, and reach the radiant snow mountain."
