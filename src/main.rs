@@ -8,6 +8,12 @@ struct TagCube; // 旋转立方体标签  / Cube marker
 #[derive(Component)]
 struct TagMainCamera; // 主摄像机标签    / Main-camera marker
 
+#[derive(Component)]
+struct Player;                 // 玩家标记  // Player marker
+
+#[derive(Event)]
+struct HitEvent;        // 碰撞事件标记  // Hit event marker
+
 /* ──────────────── Esc → Quit ─────────────── */
 fn close_on_esc(
     keys: Res<ButtonInput<KeyCode>>, // 键盘输入资源
@@ -77,6 +83,21 @@ fn rotate_cube(
     }
 }
 
+
+// ===== ② Player Slash 系统 ===============================
+fn player_slash(
+    keys: Res<ButtonInput<KeyCode>>,
+    mut ev_writer: EventWriter<HitEvent>,
+    q_player: Query<Entity, With<Player>>,
+) {
+    if keys.just_pressed(KeyCode::Space) {
+        if q_player.get_single().is_ok() {
+            ev_writer.send(HitEvent);
+            info!("HitEvent sent");   // 看到这行说明触发成功 // If you see this line, it means the trigger is successful
+        }
+    }
+}
+
 /* ──────────────── Setup ─────────────── */
 /*──────────────── Scene setup ───────────────*/
 fn setup(
@@ -110,6 +131,8 @@ fn setup(
         MeshMaterial3d(cube_mat),
         Transform::default(),
         TagCube,
+        Player,                       // ★ 挂 Player 标签 // Add Player tag
+        HitEvent,                    // ★ 挂 HitEvent 标签 // Add HitEvent tag
     ));
 }
 
@@ -117,6 +140,7 @@ fn setup(
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_event::<HitEvent>()                      // ★ 注册事件类型 // Register event type
         .add_systems(Startup, setup)
         .add_systems(
             Update,
@@ -124,6 +148,8 @@ fn main() {
                 close_on_esc, // 1) Esc 退出：按下 Esc 键退出游戏
                 move_camera,  // 2) WASD 移动：按下 WASD 键移动相机
                 rotate_cube,  // 3) 旋转立方体：每帧旋转立方体
+                player_slash  // 4) 玩家攻击：按下空格键触发攻击事件 
+                // 4) Player attack: Press the space key to trigger the attack event
             ),
         )
         .run();
