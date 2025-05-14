@@ -22,6 +22,11 @@ struct Health {
     current: i32,
 } // 血量  // Health marker
 
+
+
+const ENEMY_SPEED: f32 = 3.0;   // units per second
+const STOP_DIST: f32 = 1.5;
+
 /* ──────────────── Esc → Quit ─────────────── */
 fn close_on_esc(
     keys: Res<ButtonInput<KeyCode>>, // 键盘输入资源
@@ -125,6 +130,27 @@ fn apply_damage(
     }
 }
 
+// ===== ③ Enemy Chase 系统 ===============================
+
+fn enemy_chase(
+    time: Res<Time>,
+    mut q_enemy: Query<&mut Transform, With<Enemy>>,
+    q_player: Query<&Transform, (With<Player>, Without<Enemy>)>,
+) {
+    let player_tf = q_player.single();
+    for mut enemy_tf in &mut q_enemy {
+        let dir = player_tf.translation - enemy_tf.translation;
+        let dist = dir.length();
+        if dist > STOP_DIST {
+            enemy_tf.translation += dir.normalize() * ENEMY_SPEED * time.delta_secs();
+        }
+        // 可选调试 // Optional debug
+        // info!("enemy pos: {:?}", enemy_tf.translation);
+        // info!("player pos: {:?}", player_tf.translation);
+        info!("dist: {:.2}", dist);
+    }
+}
+
 /* ──────────────── Setup ─────────────── */
 /*──────────────── Scene setup ───────────────*/
 fn setup(
@@ -168,7 +194,7 @@ fn setup(
     commands.spawn((
         Mesh3d(enemy_mesh),
         MeshMaterial3d(enemy_mat),
-        Transform::from_xyz(3.0, 0.0, 0.0), // 站在玩家右前方
+        Transform::from_xyz(9.0, 0.0, 0.0), // 站在玩家右前方
         Enemy,
         Health { current: 30 }, // 初始 30 HP
     ));
@@ -190,6 +216,8 @@ fn main() {
                               // 4) Player attack: Press the space key to trigger the attack event
                               apply_damage, // 5) 应用伤害：处理 HitEvent 事件，减少敌人血量
                 // 5) Apply damage: Process HitEvent event to reduce enemy health
+                enemy_chase, // 6) 敌人追击：敌人朝向玩家移动
+                // 6) Enemy chase: The enemy moves towards the player
             ),
         )
         .run();
