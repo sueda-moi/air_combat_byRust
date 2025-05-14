@@ -1,3 +1,4 @@
+use bevy::ecs::system::ParamSet;
 use bevy::prelude::Cuboid;
 use bevy::prelude::*;
 use bevy::render::mesh::{Mesh, Mesh3d};
@@ -22,9 +23,13 @@ struct Health {
     current: i32,
 } // 血量  // Health marker
 
+#[derive(Component)]
+struct StaggerTimer(Timer); // 眩晕计时器  // Stagger timer marker
 
+#[derive(Component, Deref, DerefMut)]
+struct Velocity(Vec3); // 速度  // Velocity marker
 
-const ENEMY_SPEED: f32 = 3.0;   // units per second
+const ENEMY_SPEED: f32 = 3.0; // units per second
 const STOP_DIST: f32 = 1.5;
 
 /* ──────────────── Esc → Quit ─────────────── */
@@ -114,22 +119,72 @@ fn player_slash(
 // Apply damage system
 fn apply_damage(
     mut ev_reader: EventReader<HitEvent>,
-    mut q_enemy: Query<(&mut Health, Entity), With<Enemy>>,
+    mut commands: Commands,
+    mut sets: ParamSet<(
+        Query<(Entity, &mut Transform, &mut Health), With<Enemy>>, // p0: enemy
+        Query<&Transform, With<Player>>,                           // p1: player
+    )>,
 ) {
+    // ① 只读玩家位置，借用立刻结束 // Read-only player position, borrow ends immediately
+    let player_pos = sets.p1().single().translation;// 只读玩家位置 // Read-only player position
+    // ② 处理所有 HitEvent
     for _ in ev_reader.read() {
-        if let Ok((mut hp, entity)) = q_enemy.get_single_mut() {
+        // 场景里只有一个 Enemy；如果有多个可以遍历并做距离判定
+        if let Ok((enemy_ent, mut enemy_tf, mut hp)) = sets.p0().get_single_mut() {
             hp.current -= 10;
-            info!("Enemy HP -> {}", hp.current.max(0)); // 打印剩余血量 // Print remaining health
+            info!("Enemy HP -> {}", hp.current.max(0));
 
-            if hp.current <= 0 {
+            if hp.current > 0 {
+                /* ---------- 击退 + 硬直 ---------- */
+                // 方向 = 敌人 → 玩家 // Direction = Enemy → Player
+                // 计算击退方向 // Calculate knockback direction
+                let knock_dir = (enemy_tf.translation - player_pos).normalize(); // 归一化 // Normalize
+                // 计算击退方向 // Calculate knockback direction
+
+                // 即时位移 0.5 m // Instant displacement 0.5 m
+                // 直接修改敌人位置 // Directly modify enemy position
+                enemy_tf.translation += knock_dir * 0.5;
+
+                // 在实体上插入 StaggerTimer 与 Velocity // Insert StaggerTimer and Velocity into the entity
+                // StaggerTimer = 眩晕计时器，持续 0.3 秒
+                commands
+                    .entity(enemy_ent)
+                    .insert(StaggerTimer(Timer::from_seconds(0.3, TimerMode::Once)))
+                    .insert(Velocity(knock_dir * 4.0)); // 向外 4 u/s
+            } else {
                 info!("Victory!");
-                // 可选：despawn 敌人
-                // commands.entity(entity).despawn_recursive();
+                // 可选：真正删除敌人实体，避免再次 get_single 出错
+                // commands.entity(enemy_ent).despawn_recursive();
+                // Optional: Actually delete the enemy entity to avoid getting single error again
+                // commands.entity(enemy_ent).despawn_recursive();
+                // 可选：真正删除敌人实体，避免再次 get_single 出错
+                // 这里可以添加其他逻辑，比如播放动画、掉落物品等
+                // Optional: Here you can add other logic, such as playing animations, dropping items, etc.
             }
         }
     }
 }
 
+//  ===== 眩晕系统 ===============================
+// 眩晕系统：处理眩晕计时器和速度 // Stagger system: Handle stagger timer and velocity
+// update_stagger
+fn update_stagger(time: Res<Time>, mut q: Query<(&mut StaggerTimer, &mut Velocity)>) {
+    for (mut timer, mut vel) in &mut q {
+        timer.0.tick(time.delta());
+        if timer.0.finished() {
+            vel.0 = Vec3::ZERO; // 停止额外力
+        }
+    }
+}
+
+//  ===== 应用速度系统 ===============================
+
+// apply_velocity (每帧)
+fn apply_velocity(time: Res<Time>, mut q: Query<(&mut Transform, &mut Velocity)>) {
+    for (mut tf, mut vel) in &mut q {
+        tf.translation += **vel * time.delta_secs();
+    }
+}
 // ===== ③ Enemy Chase 系统 ===============================
 
 fn enemy_chase(
@@ -147,7 +202,7 @@ fn enemy_chase(
         // 可选调试 // Optional debug
         // info!("enemy pos: {:?}", enemy_tf.translation);
         // info!("player pos: {:?}", player_tf.translation);
-        info!("dist: {:.2}", dist);
+        //info!("dist: {:.2}", dist);
     }
 }
 
@@ -184,8 +239,7 @@ fn setup(
         MeshMaterial3d(cube_mat),
         Transform::default(),
         TagCube,
-        Player,   // ★ 挂 Player 标签 // Add Player tag
-        HitEvent, // ★ 挂 HitEvent 标签 // Add HitEvent tag
+        Player, // ★ 挂 Player 标签 // Add Player tag
     ));
     // 立方体玩家已存在，下方再生成 Enemy 立方体，位置偏右 // The cube player already exists, and the enemy cube is generated below, offset to the right
     let enemy_mesh = meshes.add(Mesh::from(Cuboid::from_size(Vec3::ONE)));
@@ -213,11 +267,15 @@ fn main() {
                 move_camera,  // 2) WASD 移动：按下 WASD 键移动相机
                 rotate_cube,  // 3) 旋转立方体：每帧旋转立方体
                 player_slash, // 4) 玩家攻击：按下空格键触发攻击事件
-                              // 4) Player attack: Press the space key to trigger the attack event
-                              apply_damage, // 5) 应用伤害：处理 HitEvent 事件，减少敌人血量
+                // 4) Player attack: Press the space key to trigger the attack event
+                apply_damage, // 5) 应用伤害：处理 HitEvent 事件，减少敌人血量
                 // 5) Apply damage: Process HitEvent event to reduce enemy health
+                update_stagger, // 6) 眩晕系统：处理 StaggerTimer 和 Velocity
+                // 6) Stagger system: Handle StaggerTimer and Velocity
+                apply_velocity, // 7) 应用速度：每帧更新实体位置
+                // 7) Apply velocity: Update entity position every frame
                 enemy_chase, // 6) 敌人追击：敌人朝向玩家移动
-                // 6) Enemy chase: The enemy moves towards the player
+                             // 6) Enemy chase: The enemy moves towards the player
             ),
         )
         .run();
