@@ -125,8 +125,6 @@ fn apply_damage(
         Query<&Transform, With<Player>>,                           // p1: player
     )>,
 ) {
-    // 1️⃣ 只读玩家变换 // 1️⃣ Read-only player transform
-
     // ① 只读玩家位置，借用立刻结束 // Read-only player position, borrow ends immediately
     let player_pos = sets.p1().single().translation;// 只读玩家位置 // Read-only player position
     // ② 处理所有 HitEvent
