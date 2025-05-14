@@ -127,8 +127,8 @@ fn apply_damage(
 ) {
     // 1️⃣ 只读玩家变换 // 1️⃣ Read-only player transform
 
-    // ① 只读玩家位置，借用立刻结束
-    let player_pos = sets.p1().single().translation;
+    // ① 只读玩家位置，借用立刻结束 // Read-only player position, borrow ends immediately
+    let player_pos = sets.p1().single().translation;// 只读玩家位置 // Read-only player position
     // ② 处理所有 HitEvent
     for _ in ev_reader.read() {
         // 场景里只有一个 Enemy；如果有多个可以遍历并做距离判定
