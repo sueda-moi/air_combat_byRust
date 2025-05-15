@@ -5,3 +5,7 @@ edition = "2024"
 
 [dependencies]
 bevy = "0.15.1"
+
+# [workspace]
+# members = ["air_combat", "programs/battle_record"]
+
