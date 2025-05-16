@@ -1,96 +1,129 @@
-# Air‑Combat Demo (Bevy 0.15)
+# ❄️ Air-Combat: Real-Time Solana Game Prototype
 
-空战实时战斗原型
+> ⛓️ A lightweight combat game prototype built with Rust + Bevy, designed for on-chain battle record integration on Solana.
 
-> Solo dev – step by step.
-> 个人独立 · 一步一脚印
+## 🎮 Gameplay Demo
 
----
+- WASD: Move the camera
+- Space: Slash attack
+- Cube (Player) vs. Red Cube (Enemy)
+- Real-time damage system with hit reaction and knockback
+- Enemy HP text updates dynamically
 
-## ① Project Vision / 项目愿景
-
-A small‑scale real‑time **combat sandbox** built with **Rust + Bevy**, then extended to an on‑chain game for the 2025 Solana hackathon.
-
-* **Gameplay 目标** | 实机玩法：空中连击 · 轻功 · Boss 速杀
-* **Lore 核心** | 世界观：反抗暴政 / 失忆伙伴 / 白蛇圣物 / 雪山终点
-* **Chain 集成** | 上链：钱包登录 · 战绩记录 · NFT 道具 · 剧情节点
+<!-- Optional: Insert animated gif or screenshot -->
+<!-- ![screenshot](./assets/demo.gif) -->
 
 ---
 
-## ② Current Status / 当前进度
+## ✅ Features Implemented
 
-|  Stage          |  Done  |  说明                     |
-| --------------- | ------ | ----------------------- |
-|  Boot Window    |  ✅     | 窗口 + ESC 退出             |
-|  Scene Setup    |  ✅     | 摄像机 · 点光源 · 立方体         |
-|  Cube Rotation  |  ✅     | 45°/s Y‑axis 自转         |
-|  Camera WASD    |  ✅     | WASD 平移主摄像机             |
-|  Combat Core α  |  ⏳     | Player Slash, Enemy AI… |
-
-
----
-
-## ③ Directory Layout / 目录结构
-
-```
-├─ assets/            # meshes, textures, animations
-├─ src/
-│   └─ main.rs        # single‑file prototype (will split later)
-├─ schedule.md        # step‑by‑step task log
-└─ README.md          # this file
-```
+| Feature | Description |
+| --- | --- |
+| Basic scene setup | Camera, light, player/enemy cubes |
+| Cube rotation system | Continuous Y-axis rotation |
+| WASD camera movement | Free-fly camera controller |
+| Player slash system | HitEvent triggered via Spacebar |
+| Enemy damage & knockback | Enemy HP reduces on hit |
+| Enemy HP text UI | Floating HP updates above enemy cube |
+| Modular ECS plugin structure | Separated into core/combat/ai modules |
 
 ---
 
-## ④ Build & Run / 快速开始
+## 🚧 Work in Progress
+
+> This is an active prototype under development. More systems are being added every day.
+
+| Next Milestones |
+| --- |
+| [ ] Multi-enemy system with targeting |
+| [ ] Full ability system (hitbox + cooldowns) |
+| [ ] On-chain battle recording (Anchor) |
+| [ ] UI panel: result / log / wallet connect |
+| [ ] Scene builder with snow-mountain theme |
+
+---
+
+## 🌄 World Vision
+
+> Inspired by a recurring dream: companions with lost memories, rebellion against a hidden order, and a radiant snow mountain as the final destination.
+
+This project will grow into a **lore-rich, modular open-source world engine**, starting from a minimalist battle system.
+
+---
+
+## ⚙️ Tech Stack
+
+- 🦀 Rust + [Bevy 0.15](https://bevyengine.org/)
+- 📦 ECS-based system modularization (Plugins)
+- 🎮 Real-time combat systems (slash, stagger, velocity)
+- 🧠 Designed for on-chain integration (Solana Devnet + Anchor)
+
+---
+
+## 📁 How to Run
 
 ```bash
-# Prerequisites
-rustup update stable        # Rust 1.78+
-cargo install cargo‑edit    # for `cargo add`
-
-# Clone & build
-git clone <repo>
+git clone https://github.com/yourname/air_combat
 cd air_combat
-cargo run                   # debug build
+cargo run
 ```
 
-发布版：`cargo run --release`。
+---
+
+## 🙋‍♀️ Author
+
+Built by a solo dev transitioning from full-stack TypeScript to Rust/Web3.  
+Join me in exploring lore-driven, minimalist chain-integrated game engines.
 
 ---
 
-## ⑤ Roadmap / 路线图
+## 🛠️ Project Vision
 
-> 详细时间表见 **schedule.md**
+**This project started with a question:**
 
-1. **Combat Core α (May)**  – Player Slash, Enemy Chase, HP & Hit, Stagger/Knockback
-2. **Combat Core β (May‑Jun)** – Combo FSM, YAML hot‑reload stats, Mini‑Boss demo
-3. **Vertical Slice v1 (Jun)** – Chapter‑1 scene, wallet connect, on‑chain battle record
-4. **Vertical Slice v2 (Jul)** – NFT loot, story checkpoints on chain, UI polish
-5. **Hackathon Polish (Aug–Sep)** – networked co‑op prototype, QA, docs
+What if I built the PvP combat system I always wanted to play?
+
+I was a long-time player of a martial-arts MMO called **《九阴真经》**, known for its freedom-focused, timing-sensitive large-scale PvP system. While the game is aging, its core combat design still feels unmatched. In particular, the responsiveness during aerial movement and multi-angle clashes left a deep impression on me.
+
+This prototype is my way of reimagining that experience in a modern, self-contained, Web3-compatible system — and taking the first step toward a more expressive real-time combat engine.
+
+Key design goals:
+
+- **Directional blocking**  
+  Defensive actions only protect within a valid angle. Attacks from behind or from blind spots (e.g., overhead) deal extra damage or trigger critical hits.
+
+- **Zone-specific targeting**  
+  Each move targets a region (upper/middle/lower body), and hitboxes are resolved accordingly. Defense must match the zone *and* direction.
+
+- **Aerial combat**  
+  Characters can attack, parry, or be staggered mid-air — with the **same move set** as on the ground. No “jump-limited” simplifications.
+
+- **Realism + fantasy**  
+  While grounded in physical logic (e.g., momentum, impact), the game allows non-realistic moves like air-dashes or magical counters — as long as they are **internally consistent** and tactically meaningful.
+
+Tech stack:
+
+- **Bevy (Rust)** for real-time ECS-based gameplay  
+- **Solana (Anchor)** for recording battle results, player state, and eventually skill ownership on-chain
+
+This hackathon gave me the reason to finally start.
+
+The vision is just beginning — and I intend to keep going.
+
+**I didn’t find the game I was looking for — so I’m building it.**
 
 ---
 
-## ⑥ Tech Stack
+### ⏳ Timeline & Commitment
 
-* **Rust 1.78 stable**
-* **Bevy 0.15.1** (+ Rapier3D, bevy\_asset\_loader)
-* **Solana SDK** / Anchor / Metaplex
+I only discovered the Breakout Hackathon on **May 7th**, and decided to participate solo — with just one week to go.  
+Instead of rushing out a half-baked entry, I focused on building a **robust architecture** for a real-time combat engine with a clear long-term plan for Web3 integration.
 
----
-
-## ⑦ Contribution / 贡献
-
-The project is currently a solo R\&D log. PRs welcome after Vertical Slice v1.
-
-项目早期以个人实验为主，待 v1 后开放外部 PR。欢迎在 Issue 里讨论改进建议。
+What I'm submitting now is a **work-in-progress**, but it's real, structured, and growing every day.  
+This isn't a one-off hackathon project — it's the beginning of something bigger.
 
 ---
 
-## ⑧ License
+## License
 
-MIT
-
----
-
-> "Run, remember, and reach the radiant snow mountain."
+MIT (for now) — open for contributors soon.
