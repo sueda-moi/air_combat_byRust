@@ -9,3 +9,6 @@ use bevy::prelude::*;
 #[derive(Component)] pub struct StaggerTimer(pub Timer); // 眩晕计时器  // Stagger timer marker
 
 #[derive(Component, Deref, DerefMut)] pub struct Velocity(pub Vec3); // 速度  // Velocity marker
+
+#[derive(Component)] pub struct EnemyHpText; // 血量文字标记 // Enemy HP text marker
+
