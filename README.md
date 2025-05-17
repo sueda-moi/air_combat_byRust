@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/logo.png" alt="Air-Combat Logo" width="300"/>
+</p>
+
 # ❄️ Air-Combat: Real-Time Solana Game Prototype
 
 > ⛓️ A lightweight combat game prototype built with Rust + Bevy, designed for on-chain battle record integration on Solana.
