@@ -1,5 +1,16 @@
 use crate::components::*;
 use bevy::prelude::*;
+use crate::onchain::client::send_record_result;
+
+
+fn on_battle_end() {
+    let result: u8 = 1; // 示例：1 表示胜利
+    wasm_bindgen_futures::spawn_local(async move {
+        send_record_result(result).await;
+    });
+}
+
+
 
 pub fn spawn_enemy_hp_text(
     mut commands: Commands,
