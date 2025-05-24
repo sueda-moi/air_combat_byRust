@@ -15,20 +15,21 @@
 - Enemy HP text updates dynamically
 
 <!-- Optional: Insert animated gif or screenshot -->
+
 <!-- ![screenshot](./assets/demo.gif) -->
 
 ---
 
 ## ✅ Features Implemented
 
-| Feature | Description |
-| --- | --- |
-| Basic scene setup | Camera, light, player/enemy cubes |
-| Cube rotation system | Continuous Y-axis rotation |
-| WASD camera movement | Free-fly camera controller |
-| Player slash system | HitEvent triggered via Spacebar |
-| Enemy damage & knockback | Enemy HP reduces on hit |
-| Enemy HP text UI | Floating HP updates above enemy cube |
+| Feature                      | Description                           |
+| ---------------------------- | ------------------------------------- |
+| Basic scene setup            | Camera, light, player/enemy cubes     |
+| Cube rotation system         | Continuous Y-axis rotation            |
+| WASD camera movement         | Free-fly camera controller            |
+| Player slash system          | HitEvent triggered via Spacebar       |
+| Enemy damage & knockback     | Enemy HP reduces on hit               |
+| Enemy HP text UI             | Floating HP updates above enemy cube  |
 | Modular ECS plugin structure | Separated into core/combat/ai modules |
 
 ---
@@ -37,19 +38,21 @@
 
 > This is an active prototype under development. More systems are being added every day.
 
-| Next Milestones |
-| --- |
-| [ ] Multi-enemy system with targeting |
+| Next Milestones                              |
+| -------------------------------------------- |
+| [ ] Multi-enemy system with targeting        |
 | [ ] Full ability system (hitbox + cooldowns) |
-| [ ] On-chain battle recording (Anchor) |
-| [ ] UI panel: result / log / wallet connect |
-| [ ] Scene builder with snow-mountain theme |
+| [ ] On-chain battle recording (Anchor)       |
+| [ ] UI panel: result / log / wallet connect  |
+| [ ] Scene builder with snow-mountain theme   |
 
 ---
 
 ## 🌄 World Vision
 
 > Inspired by a recurring dream: companions with lost memories, rebellion against a hidden order, and a radiant snow mountain as the final destination.
+
+> This game demo serves both as a standalone narrative project, and as the testbed for a reusable, open-source Bevy combat framework.
 
 This project will grow into a **lore-rich, modular open-source world engine**, starting from a minimalist battle system.
 
@@ -67,10 +70,34 @@ This project will grow into a **lore-rich, modular open-source world engine**, s
 ## 📁 How to Run
 
 ```bash
-git clone https://github.com/yourname/air_combat
-cd air_combat
+git clone https://github.com/sueda-moi/air_combat_byRust
+cd air_combat_byRust
 cargo run
 ```
+
+---
+
+## 🔌 Future Pluginization: Towards a Reusable Combat Engine
+
+While this prototype began as a standalone Solana-integrated game, the underlying combat systems are being developed with reusability and modularity in mind.
+
+The long-term goal is to evolve this codebase into a plug-and-play Bevy combat engine, extractable as a standalone plugin (bevy_combat_engine) or middleware crate for real-time PvE/PvP mechanics.
+
+Planned features for the plugin version include:
+
+- 🎯 Configurable player/combatant components
+
+- 🌀 Hit detection + knockback logic
+
+- 💥 Ability cooldown & zone targeting
+
+- 🛡️ Directional blocking & parry systems
+
+- 🧩 Clean integration into Bevy app lifecycle (.add_plugin(CombatPlugin))
+
+Once stabilized, the core combat loop will be decoupled from this game demo and offered as a community-friendly module — potentially submitable to the Bevy Plugin Index.
+
+📦 Interested in contributing to the pluginization effort? Reach out via GitHub issues.
 
 ---
 
