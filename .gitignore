@@ -4,6 +4,7 @@
 # WASM build outputs
 /pkg
 wasm_bridge/pkg/
+wasm_bridge/target/
 
 # Node.js dependencies
 node_modules/
@@ -17,6 +18,8 @@ Project_Timeline___Module_Mapping.csv
 .DS_Store
 
 # VSCode settings (optional)
+*.log
+.idea/
 .vscode/
 
 # Local secrets (optional)
@@ -24,4 +27,6 @@ Project_Timeline___Module_Mapping.csv
 
 # Backups
 /backup/
+
+
 
