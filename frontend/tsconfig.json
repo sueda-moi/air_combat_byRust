@@ -19,7 +19,13 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* 👇 加上这两项 */
+    "baseUrl": ".",
+    "paths": {
+      "@wasm/*": ["../wasm_bridge/pkg/*"]
+    }
   },
   "include": ["src"]
 }

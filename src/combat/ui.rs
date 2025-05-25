@@ -1,8 +1,12 @@
 use crate::components::*;
 use bevy::prelude::*;
 use crate::onchain::client::send_record_result;
+use wasm_bindgen_futures::spawn_local;
+use bevy::input::keyboard::KeyCode;
+use bevy::input::ButtonInput;
 
 
+// deal with battle end event
 fn on_battle_end() {
     let result: u8 = 1; // 示例：1 表示胜利
     wasm_bindgen_futures::spawn_local(async move {
@@ -63,3 +67,13 @@ pub fn update_enemy_hp_text(
         }
     }
 }
+
+pub fn on_key_press(input: Res<ButtonInput<KeyCode>>) {
+    if input.just_pressed(KeyCode::KeyB) {
+        let result: u8 = 1; // 示例：胜利 
+        spawn_local(async move {
+            send_record_result(result).await;
+        });
+    }
+}
+
