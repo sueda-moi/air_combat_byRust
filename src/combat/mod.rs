@@ -6,7 +6,7 @@ mod stagger;
 mod ui;
 mod velocity;
 
-use ui::{spawn_enemy_hp_text, update_enemy_hp_text};
+use ui::{spawn_enemy_hp_text, update_enemy_hp_text, on_key_press};
 
 pub struct CombatPlugin;
 
@@ -22,6 +22,7 @@ impl Plugin for CombatPlugin {
                     stagger::update_stagger,
                     velocity::apply_velocity,
                     update_enemy_hp_text,
+                     on_key_press,
                 ),
             );
     }
