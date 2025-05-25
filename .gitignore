@@ -1,1 +1,27 @@
+# Rust build artifacts
 /target
+
+# WASM build outputs
+/pkg
+wasm_bridge/pkg/
+
+# Node.js dependencies
+node_modules/
+/frontend/node_modules/
+/frontend/dist/
+
+# Personal/internal files
+Project_Timeline___Module_Mapping.csv
+
+# macOS system file
+.DS_Store
+
+# VSCode settings (optional)
+.vscode/
+
+# Local secrets (optional)
+.env
+
+# Backups
+/backup/
+
