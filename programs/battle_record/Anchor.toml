@@ -1,0 +1,22 @@
+[toolchain]
+
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+battle_record = "GfD7dmvutPGvd19ppB45ijzhLDu14oCwMCzWDBodaRM"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = 'C:\Users\fovig\.config/solana/id.json'
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+
+
+
+
