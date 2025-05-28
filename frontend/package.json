@@ -13,6 +13,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "0.31.1",
     "@solana/web3.js": "^1.98.2"
   }
 }
