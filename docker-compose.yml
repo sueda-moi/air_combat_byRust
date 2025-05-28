@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: solana_dev_env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: solana-dev:latest
+    volumes:
+      - .:/app
+      - cargo_cache:/usr/local/cargo/registry
+      - target_cache:/app/target
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    ports:
+      - "8899:8899"   # solana-test-validator 默认端口
+      - "8900:8900"   # websocket
+    environment:
+      - RUST_BACKTRACE=1
+      - NODE_ENV=development
+    command: /bin/bash
+
+volumes:
+  cargo_cache:
+  target_cache:

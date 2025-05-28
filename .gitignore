@@ -1,32 +1,46 @@
-# Rust build artifacts
-/target
+# ───────────────────────────────
+# 🔧 Rust build artifacts
+/target/
+**/target/
+
+# Anchor-generated artifacts
+**/.anchor/
+Cargo.lock
 
 # WASM build outputs
-/pkg
+/pkg/
 wasm_bridge/pkg/
 wasm_bridge/target/
 
-# Node.js dependencies
-node_modules/
+# ───────────────────────────────
+# 📦 Node.js dependencies & build outputs
 /frontend/node_modules/
 /frontend/dist/
+node_modules/
+dist/
 
-# Personal/internal files
-Project_Timeline___Module_Mapping.csv
+# ───────────────────────────────
+# 💻 IDEs & editor config
+.vscode/
+.idea/
+*.log
 
-# macOS system file
+# MacOS system file
 .DS_Store
 
-# VSCode settings (optional)
-*.log
-.idea/
-.vscode/
-
-# Local secrets (optional)
+# ───────────────────────────────
+# 🔐 Secrets / Environment files
 .env
+.env.local
+.env.*.local
 
-# Backups
+# ───────────────────────────────
+# 📂 Local-only project files
 /backup/
+/programs/battle_record_old/
+Project_Timeline___Module_Mapping.csv
 
-
-
+# ───────────────────────────────
+# 🐳 Docker local volumes (optional, if not persisted)
+/cargo_cache/
+/target_cache/

@@ -1,0 +1,37 @@
+# Rust build artifacts
+target
+**/target
+
+# WASM build outputs
+pkg
+wasm_bridge/pkg
+wasm_bridge/target
+
+# Node.js
+node_modules
+/frontend/node_modules
+/frontend/dist
+
+# IDE/editor/project files
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+
+# Anchor / Solana cache
+.anchor
+test-ledger
+backup
+programs/battle_record_old
+
+# Git and VCS
+.git
+.gitignore
+
+# Backup files
+*.rsbk
+*.tar.*

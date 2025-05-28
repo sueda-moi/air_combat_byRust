@@ -8,11 +8,11 @@
 
 ## 🎮 Gameplay Demo
 
-* WASD: Move the camera
-* Space: Slash attack
-* Cube (Player) vs. Red Cube (Enemy)
-* Real-time damage system with hit reaction and knockback
-* Enemy HP text updates dynamically
+- WASD: Move the camera
+- Space: Slash attack
+- Cube (Player) vs. Red Cube (Enemy)
+- Real-time damage system with hit reaction and knockback
+- Enemy HP text updates dynamically
 
 <!-- Optional: Insert animated gif or screenshot -->
 
@@ -22,15 +22,15 @@
 
 ## ✅ Features Implemented
 
-| Feature                               | Description                             |
-| ------------------------------------- | --------------------------------------- |
-| Basic scene setup                     | Camera, light, player/enemy cubes       |
-| Cube rotation system                  | Continuous Y-axis rotation              |
-| WASD camera movement                  | Free-fly camera controller              |
-| Player slash system                   | HitEvent triggered via Spacebar         |
-| Enemy damage & knockback              | Enemy HP reduces on hit                 |
-| Enemy HP text UI                      | Floating HP updates above enemy cube    |
-| Modular ECS plugin structure          | Separated into core/combat/ai modules   |
+| Feature | Description |
+| --- | --- |
+| Basic scene setup | Camera, light, player/enemy cubes |
+| Cube rotation system | Continuous Y-axis rotation |
+| WASD camera movement | Free-fly camera controller |
+| Player slash system | HitEvent triggered via Spacebar |
+| Enemy damage & knockback | Enemy HP reduces on hit |
+| Enemy HP text UI | Floating HP updates above enemy cube |
+| Modular ECS plugin structure | Separated into core/combat/ai modules |
 | 🔌 WASM + Solana frontend integration | Vite + wasm-pack + Solana devnet signer |
 
 ---
@@ -39,13 +39,13 @@
 
 > This is an active prototype under development. More systems are being added every day.
 
-| Next Milestones                               |
-| --------------------------------------------- |
-| \[ ] Multi-enemy system with targeting        |
+| Next Milestones |
+| --- |
+| \[ ] Multi-enemy system with targeting |
 | \[ ] Full ability system (hitbox + cooldowns) |
-| \[ ] On-chain battle recording (Anchor)       |
-| \[ ] UI panel: result / log / wallet connect  |
-| \[ ] Scene builder with snow-mountain theme   |
+| \[ ] On-chain battle recording (Anchor) |
+| \[ ] UI panel: result / log / wallet connect |
+| \[ ] Scene builder with snow-mountain theme |
 
 ---
 
@@ -55,10 +55,10 @@ This project includes a **Rust-generated WebAssembly module** (`wasm_bridge`) fo
 
 **Key files and structure:**
 
-* `wasm_bridge/`: Rust crate that builds to `.wasm` via `wasm-pack`
-* `frontend/src/js_bridge.ts`: Loads the wasm module & mounts `window.signAndSendTransaction`
-* `frontend/vite.config.ts`: Configures alias `@wasm` and ensures wasm file served from `public/`
-* `frontend/public/wasm_bridge/wasm_bridge_bg.wasm`: Compiled WebAssembly binary
+- `wasm_bridge/`: Rust crate that builds to `.wasm` via `wasm-pack`
+- `frontend/src/js_bridge.ts`: Loads the wasm module & mounts `window.signAndSendTransaction`
+- `frontend/vite.config.ts`: Configures alias `@wasm` and ensures wasm file served from `public/`
+- `frontend/public/wasm_bridge/wasm_bridge_bg.wasm`: Compiled WebAssembly binary
 
 **How to build wasm:**
 
@@ -94,11 +94,11 @@ This project will grow into a **lore-rich, modular open-source world engine**, s
 
 ## ⚙️ Tech Stack
 
-* 🦀 Rust + [Bevy 0.15](https://bevyengine.org/)
-* 📦 ECS-based system modularization (Plugins)
-* 🎮 Real-time combat systems (slash, stagger, velocity)
-* 🧠 Designed for on-chain integration (Solana Devnet + Anchor)
-* 🌐 Vite + TypeScript frontend + WebAssembly bridge
+- 🦀 Rust + [Bevy 0.15](https://bevyengine.org/)
+- 📦 ECS-based system modularization (Plugins)
+- 🎮 Real-time combat systems (slash, stagger, velocity)
+- 🧠 Designed for on-chain integration (Solana Devnet + Anchor)
+- 🌐 Vite + TypeScript frontend + WebAssembly bridge
 
 ---
 
@@ -127,25 +127,80 @@ Then open `http://localhost:5173` in browser.
 
 ---
 
+### 🐳 Docker 开发环境启动说明
+
+### 🐳 Docker-based Development Environment Setup
+
+本项目使用 Docker 容器运行 Solana 合约开发环境，包含 Rust、Solana CLI、Anchor CLI 等工具，推荐以此方式统一开发与部署流程。  
+This project uses a Docker container for the Solana smart contract development environment, including Rust, Solana CLI, and Anchor CLI. We recommend this setup for consistent development and deployment.
+
+---
+
+#### ✅ 第一次启动（建议构建镜像）
+
+#### ✅ First-time Startup (Recommended to build the image)
+
+```bash
+docker-compose up -d --build
+```
+
+这会构建镜像，并挂载本地代码目录到容器，支持代码热更新。  
+This builds the container image and mounts the local code directory into the container, enabling hot reload support.
+
+---
+
+#### 🧳 进入开发容器
+
+#### 🧳 Enter the Development Container
+
+```bash
+docker exec -it solana_dev_env bash
+```
+
+---
+
+#### 📦 部署合约（容器内）
+
+#### 📦 Deploy the Program (inside container)
+
+```bash
+cd /app/air_combat_anchor
+anchor deploy
+```
+
+⚠️ 默认部署钱包路径为 `/root/.config/solana/dev_id.json`，请确保 `Anchor.toml` 中的 `[provider]` 区块已正确设置：  
+⚠️ The default wallet for deployment is located at `/root/.config/solana/dev_id.json`. Ensure your `[provider]` block in `Anchor.toml` is configured like this:
+
+```toml
+[provider]
+cluster = "localnet"
+wallet = "/root/.config/solana/dev_id.json"
+```
+
+---
+
+#### 💡 补充说明 / Additional Notes
+
+- 如果 `solana airdrop` 报错，请确认是否连接的是本地链（默认 `http://127.0.0.1:8899`）。
+- If `solana airdrop` fails, ensure that you are connected to a local validator (default: `http://127.0.0.1:8899`).
+- 部署成功后会在终端输出 `Deploy success`，包含 Program Id 与 Transaction Signature。
+- Upon successful deployment, the terminal will show `Deploy success`, with the Program Id and transaction signature.
+
+---
+
 ## 🔌 Future Pluginization: Towards a Reusable Combat Engine
 
 While this prototype began as a standalone Solana-integrated game, the underlying combat systems are being developed with reusability and modularity in mind.
-
-The long-term goal is to evolve this codebase into a plug-and-play Bevy combat engine, extractable as a standalone plugin (bevy\_combat\_engine) or middleware crate for real-time PvE/PvP mechanics.
-
+The long-term goal is to evolve this codebase into a plug-and-play Bevy combat engine, extractable as a standalone plugin (bevy_combat_engine) or middleware crate for real-time PvE/PvP mechanics.
 Planned features for the plugin version include:
 
-* 🎯 Configurable player/combatant components
-* 🌀 Hit detection + knockback logic
-* 💥 Ability cooldown & zone targeting
-* 🛡️ Directional blocking & parry systems
-* 🧩 Clean integration into Bevy app lifecycle (.add\_plugin(CombatPlugin))
-
-Once stabilized, the core combat loop will be decoupled from this game demo and offered as a community-friendly module — potentially submitable to the Bevy Plugin Index.
-
-📦 Interested in contributing to the pluginization effort? Reach out via GitHub issues.
-
----
+- 🎯 Configurable player/combatant components
+- 🌀 Hit detection + knockback logic
+- 💥 Ability cooldown & zone targeting
+- 🛡️ Directional blocking & parry systems
+- 🧩 Clean integration into Bevy app lifecycle (.add_plugin(CombatPlugin))
+  Once stabilized, the core combat loop will be decoupled from this game demo and offered as a community-friendly module — potentially submitable to the Bevy Plugin Index.
+  📦 Interested in contributing to the pluginization effort? Reach out via GitHub issues.
 
 ## 🙋‍♀️ Author
 
@@ -166,22 +221,19 @@ This prototype is my way of reimagining that experience in a modern, self-contai
 
 Key design goals:
 
-* **Directional blocking**
-  Defensive actions only protect within a valid angle. Attacks from behind or from blind spots (e.g., overhead) deal extra damage or trigger critical hits.
-
-* **Zone-specific targeting**
-  Each move targets a region (upper/middle/lower body), and hitboxes are resolved accordingly. Defense must match the zone *and* direction.
-
-* **Aerial combat**
-  Characters can attack, parry, or be staggered mid-air — with the **same move set** as on the ground. No “jump-limited” simplifications.
-
-* **Realism + fantasy**
-  While grounded in physical logic (e.g., momentum, impact), the game allows non-realistic moves like air-dashes or magical counters — as long as they are **internally consistent** and tactically meaningful.
+- **Directional blocking** Defensive actions only protect within a valid angle. Attacks from behind or from blind spots (e.g., overhead) deal extra damage or trigger critical hits.
+  
+- **Zone-specific targeting** Each move targets a region (upper/middle/lower body), and hitboxes are resolved accordingly. Defense must match the zone *and* direction.
+  
+- **Aerial combat** Characters can attack, parry, or be staggered mid-air — with the **same move set** as on the ground. No “jump-limited” simplifications.
+  
+- **Realism + fantasy** While grounded in physical logic (e.g., momentum, impact), the game allows non-realistic moves like air-dashes or magical counters — as long as they are **internally consistent** and tactically meaningful.
+  
 
 Tech stack:
 
-* **Bevy (Rust)** for real-time ECS-based gameplay
-* **Solana (Anchor)** for recording battle results, player state, and eventually skill ownership on-chain
+- **Bevy (Rust)** for real-time ECS-based gameplay
+- **Solana (Anchor)** for recording battle results, player state, and eventually skill ownership on-chain
 
 This hackathon gave me the reason to finally start.
 
