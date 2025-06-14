@@ -1,0 +1,18 @@
+.wallet-context-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wallet-connection-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

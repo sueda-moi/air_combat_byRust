@@ -14,9 +14,10 @@ wasm_bridge/target/
 
 # ───────────────────────────────
 # 📦 Node.js dependencies & build outputs
-/frontend/node_modules/
-/frontend/dist/
+/next_frontend/node_modules/
+/next_frontend/dist/
 node_modules/
+
 dist/
 
 # ───────────────────────────────
@@ -39,6 +40,7 @@ dist/
 /backup/
 /programs/battle_record_old/
 Project_Timeline___Module_Mapping.csv
+/frontend/
 
 # ───────────────────────────────
 # 🐳 Docker local volumes (optional, if not persisted)

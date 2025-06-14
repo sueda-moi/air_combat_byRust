@@ -1,0 +1,38 @@
+.battle-button {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.battle-button:hover {
+  background-color: #1d4ed8;
+}
+
+.battle-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.battle-success {
+  margin-top: 1rem;
+  color: #059669;
+  font-size: 0.875rem;
+}
+
+.battle-success a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.battle-error {
+  margin-top: 1rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
