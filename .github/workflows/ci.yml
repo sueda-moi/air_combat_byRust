@@ -1,0 +1,66 @@
+name: CI for Rust + Next.js
+
+on:
+  push:
+    branches: [master, ci-workflow]
+  pull_request:
+    branches: [master, sprint]
+
+jobs:
+  build-rust:
+    name: Build Rust backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Build Rust project
+        run: cargo build --verbose
+
+  build-next:
+    name: Build Next.js frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: next_frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: next_frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('next_frontend/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint and Build
+        run: |
+          yarn lint
+          yarn build
