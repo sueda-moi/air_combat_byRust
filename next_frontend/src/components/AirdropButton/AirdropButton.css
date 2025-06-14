@@ -1,0 +1,57 @@
+.airdrop-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.airdrop-button {
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.airdrop-button:hover {
+  background-color: #059669;
+}
+
+.airdrop-button:disabled {
+  background-color: #6ee7b7;
+  cursor: not-allowed;
+}
+
+.airdrop-msg {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.manual-transfer-box {
+  margin-top: 1rem;
+}
+
+.manual-transfer-button {
+  background-color: #0070f3;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.airdrop-error {
+  color: #e00;
+  margin-top: 0.5rem;
+}
+
+.airdrop-success {
+  color: #0a0;
+  margin-top: 0.5rem;
+}
+

@@ -1,0 +1,84 @@
+{
+  "accounts": [
+    {
+      "discriminator": [
+        81,
+        148,
+        121,
+        71,
+        63,
+        166,
+        116,
+        24
+      ],
+      "name": "Battle"
+    }
+  ],
+  "address": "6THjAp4TKcGdJF28Sd8fpP6vRA2acZadjjqdvCYH4JoN",
+  "instructions": [
+    {
+      "accounts": [
+        {
+          "name": "battle",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "winner",
+          "type": "pubkey"
+        },
+        {
+          "name": "loser",
+          "type": "pubkey"
+        }
+      ],
+      "discriminator": [
+        232,
+        128,
+        73,
+        27,
+        134,
+        34,
+        208,
+        110
+      ],
+      "name": "record_battle"
+    }
+  ],
+  "metadata": {
+    "name": "battle_record",
+    "spec": "0.1.0",
+    "version": "0.1.0"
+  },
+  "types": [
+    {
+      "name": "Battle",
+      "type": {
+        "fields": [
+          {
+            "name": "winner",
+            "type": "pubkey"
+          },
+          {
+            "name": "loser",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ],
+        "kind": "struct"
+      }
+    }
+  ]
+}
